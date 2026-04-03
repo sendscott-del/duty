@@ -1,4 +1,4 @@
-export const APP_VERSION = '0.1.0'
+export const APP_VERSION = '0.2.0'
 
 export interface ChangelogEntry {
   version: string
@@ -8,6 +8,20 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '0.2.0',
+    date: '2026-04-03',
+    enhancements: [
+      'XP and leveling system — earn XP with every completed chore',
+      'Streak tracking — complete all daily chores to build your streak',
+      'Badge collection — 11 badges to earn across streak, milestone, and special categories',
+      'Level-up celebrations with animated modal',
+      'Badge unlock notifications',
+      'Weekly family challenges with bonus points',
+      'Level indicator and streak flame on kid dashboard',
+      'Gamification stats on family dashboard per kid',
+    ],
+  },
   {
     version: '0.1.0',
     date: '2026-04-02',

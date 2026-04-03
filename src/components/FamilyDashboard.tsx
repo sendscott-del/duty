@@ -3,9 +3,13 @@
 import { useFamilyMember } from '@/lib/hooks/useFamilyMember'
 import { useChoresData } from '@/lib/hooks/useChoresData'
 import { useRewards } from '@/lib/hooks/useRewards'
+import { useChallenges } from '@/lib/hooks/useChallenges'
 import { MemberAvatar } from './MemberAvatar'
 import { PointsDisplay } from './PointsDisplay'
+import { StreakBadge } from './StreakBadge'
+import { LevelIndicator } from './LevelIndicator'
 import { ApprovalQueue } from './ApprovalQueue'
+import { WeeklyChallenge } from './WeeklyChallenge'
 import { todayStr, isDueToday, completionKey } from '@/lib/dates'
 import { isChoreComplete } from '@/lib/points'
 
@@ -13,6 +17,7 @@ export function FamilyDashboard() {
   const { family, member } = useFamilyMember()
   const { chores, completions, members, loading, upsertCompletion } = useChoresData(family?.id)
   const { getBalance } = useRewards(family?.id)
+  const { challenge, generateChallenge } = useChallenges(family?.id)
 
   if (loading || !family || !member) {
     return <div className="text-gray-400 text-sm text-center py-8">Loading...</div>
@@ -35,9 +40,22 @@ export function FamilyDashboard() {
       return []
     })
 
+  // Challenge progress
+  const challengeProgress = challenge?.goal_type === 'family_completions'
+    ? Array.from(completions.values()).filter(c => c.points_awarded > 0).length
+    : 0
+
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-bold">Family Dashboard</h2>
+
+      {/* Weekly challenge */}
+      <WeeklyChallenge
+        challenge={challenge}
+        progress={challengeProgress}
+        isParent={true}
+        onGenerate={generateChallenge}
+      />
 
       {/* Kids overview */}
       <div className="grid grid-cols-2 gap-3">
@@ -58,9 +76,18 @@ export function FamilyDashboard() {
               key={child.id}
               className={`rounded-xl border p-4 ${child.is_active ? 'bg-white' : 'bg-gray-50 opacity-60'}`}
             >
-              <MemberAvatar emoji={child.avatar_emoji} name={child.display_name} active={child.is_active} />
+              <div className="flex items-start justify-between">
+                <MemberAvatar emoji={child.avatar_emoji} name={child.display_name} active={child.is_active} size="sm" />
+                {child.is_active && (
+                  <LevelIndicator level={child.level} xp={child.xp} size="sm" />
+                )}
+              </div>
               {child.is_active ? (
-                <div className="mt-3 space-y-1">
+                <div className="mt-3 space-y-1.5">
+                  <div className="flex items-center gap-2">
+                    <StreakBadge streak={child.current_streak} size="sm" />
+                    <PointsDisplay points={balance} size="sm" />
+                  </div>
                   <div className="text-xs text-gray-500">
                     {doneCount} / {kidChores.length} chores today
                   </div>
@@ -69,9 +96,6 @@ export function FamilyDashboard() {
                       className="bg-green-500 h-2 rounded-full transition-all"
                       style={{ width: kidChores.length > 0 ? `${(doneCount / kidChores.length) * 100}%` : '0%' }}
                     />
-                  </div>
-                  <div className="mt-2">
-                    <PointsDisplay points={balance} size="sm" />
                   </div>
                 </div>
               ) : (

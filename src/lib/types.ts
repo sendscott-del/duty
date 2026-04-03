@@ -13,6 +13,11 @@ export interface FamilyMember {
   avatar_emoji: string
   pin: string | null
   is_active: boolean
+  xp: number
+  level: number
+  current_streak: number
+  longest_streak: number
+  last_all_done_date: string | null
   created_at: string
 }
 
@@ -63,6 +68,43 @@ export interface Reward {
   emoji: string
   is_active: boolean
   created_by: string
+  created_at: string
+}
+
+export type BadgeCategory = 'streak' | 'milestone' | 'special'
+
+export interface Badge {
+  id: string
+  slug: string
+  name: string
+  description: string
+  emoji: string
+  category: BadgeCategory
+  threshold: number | null
+  sort_order: number
+}
+
+export interface MemberBadge {
+  id: string
+  member_id: string
+  badge_slug: string
+  earned_at: string
+}
+
+export type ChallengeGoalType = 'family_completions' | 'all_streaks' | 'no_misses'
+
+export interface Challenge {
+  id: string
+  family_id: string
+  title: string
+  description: string
+  goal_type: ChallengeGoalType
+  goal_value: number
+  bonus_points: number
+  week_start: string
+  week_end: string
+  completed: boolean
+  completed_at: string | null
   created_at: string
 }
 
