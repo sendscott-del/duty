@@ -38,7 +38,7 @@ export default function HistoryPage() {
             <button
               onClick={() => setFilterMember('all')}
               className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap ${
-                filterMember === 'all' ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-600'
+                filterMember === 'all' ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600'
               }`}
             >
               All Kids
@@ -48,7 +48,7 @@ export default function HistoryPage() {
                 key={c.id}
                 onClick={() => setFilterMember(c.id)}
                 className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap ${
-                  filterMember === c.id ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-600'
+                  filterMember === c.id ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600'
                 }`}
               >
                 {c.avatar_emoji} {c.display_name}

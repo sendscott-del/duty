@@ -77,7 +77,7 @@ export function ChoreForm({ familyId, userId, members, chore, onSaved, onClose }
               value={name}
               onChange={e => setName(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
               placeholder="e.g., Take out trash"
             />
           </div>
@@ -87,7 +87,7 @@ export function ChoreForm({ familyId, userId, members, chore, onSaved, onClose }
             <input
               value={description}
               onChange={e => setDescription(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
               placeholder="Any extra details"
             />
           </div>
@@ -101,7 +101,7 @@ export function ChoreForm({ familyId, userId, members, chore, onSaved, onClose }
                 max={100}
                 value={points}
                 onChange={e => setPoints(Number(e.target.value))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
             </div>
             <div className="flex-1">
@@ -109,7 +109,7 @@ export function ChoreForm({ familyId, userId, members, chore, onSaved, onClose }
               <select
                 value={frequency}
                 onChange={e => setFrequency(e.target.value as 'daily' | 'weekly')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
               >
                 <option value="daily">Daily</option>
                 <option value="weekly">Weekly</option>
@@ -123,7 +123,7 @@ export function ChoreForm({ familyId, userId, members, chore, onSaved, onClose }
               <select
                 value={dayOfWeek ?? ''}
                 onChange={e => setDayOfWeek(e.target.value ? Number(e.target.value) : null)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
               >
                 <option value="">Any day this week</option>
                 {DAYS.map((day, i) => (
@@ -138,7 +138,7 @@ export function ChoreForm({ familyId, userId, members, chore, onSaved, onClose }
             <select
               value={assignedTo}
               onChange={e => setAssignedTo(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
             >
               <option value="">Unassigned</option>
               {activeChildren.map(m => (
@@ -156,7 +156,7 @@ export function ChoreForm({ familyId, userId, members, chore, onSaved, onClose }
                   type="checkbox"
                   checked={requireCheckoff}
                   onChange={e => setRequireCheckoff(e.target.checked)}
-                  className="rounded accent-purple-600"
+                  className="rounded accent-orange-500"
                 />
                 Check-off (kid marks it done)
               </label>
@@ -165,7 +165,7 @@ export function ChoreForm({ familyId, userId, members, chore, onSaved, onClose }
                   type="checkbox"
                   checked={requirePhoto}
                   onChange={e => setRequirePhoto(e.target.checked)}
-                  className="rounded accent-purple-600"
+                  className="rounded accent-orange-500"
                 />
                 Photo proof
               </label>
@@ -174,7 +174,7 @@ export function ChoreForm({ familyId, userId, members, chore, onSaved, onClose }
                   type="checkbox"
                   checked={requireApproval}
                   onChange={e => setRequireApproval(e.target.checked)}
-                  className="rounded accent-purple-600"
+                  className="rounded accent-orange-500"
                 />
                 Parental approval
               </label>
@@ -184,7 +184,7 @@ export function ChoreForm({ familyId, userId, members, chore, onSaved, onClose }
           <button
             type="submit"
             disabled={saving}
-            className="w-full py-2.5 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 disabled:opacity-50"
+            className="w-full py-2.5 bg-orange-500 text-white rounded-lg text-sm font-medium hover:bg-orange-600 disabled:opacity-50"
           >
             {saving ? 'Saving...' : chore ? 'Update Chore' : 'Create Chore'}
           </button>

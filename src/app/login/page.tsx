@@ -43,7 +43,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center px-4 bg-gray-50">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold text-purple-700 mb-2">💩 Duty</h1>
+          <img src="/logo.png" alt="Duty" className="h-28 w-28 mx-auto mb-2" />
           <p className="text-gray-500 text-sm">
             {mode === 'pin'
               ? 'Quick login'
@@ -71,7 +71,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   placeholder="you@example.com"
                 />
               </div>
@@ -87,7 +87,7 @@ export default function LoginPage() {
                   onChange={e => setPassword(e.target.value)}
                   required
                   minLength={6}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   placeholder="At least 6 characters"
                 />
               </div>
@@ -98,7 +98,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-2.5 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-2.5 bg-orange-500 text-white rounded-lg text-sm font-medium hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Loading...' : isSignUp ? 'Sign Up' : 'Sign In'}
               </button>
@@ -108,7 +108,7 @@ export default function LoginPage() {
               {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
               <button
                 onClick={() => { setIsSignUp(!isSignUp); setError(''); setMessage('') }}
-                className="text-purple-600 font-medium hover:underline"
+                className="text-orange-500 font-medium hover:underline"
               >
                 {isSignUp ? 'Sign In' : 'Sign Up'}
               </button>
@@ -116,7 +116,7 @@ export default function LoginPage() {
 
             <button
               onClick={() => setMode('pin')}
-              className="block mx-auto mt-4 text-sm text-purple-600 hover:underline"
+              className="block mx-auto mt-4 text-sm text-orange-500 hover:underline"
             >
               Quick login with PIN
             </button>

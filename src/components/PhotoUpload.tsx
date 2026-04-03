@@ -40,7 +40,7 @@ export function PhotoUpload({ familyId, choreId, memberId, date, onUploaded, onC
       <button
         onClick={() => fileRef.current?.click()}
         disabled={uploading}
-        className="flex items-center gap-1 px-3 py-2 bg-purple-100 text-purple-700 rounded-lg text-xs font-medium hover:bg-purple-200 disabled:opacity-50"
+        className="flex items-center gap-1 px-3 py-2 bg-orange-100 text-orange-500 rounded-lg text-xs font-medium hover:bg-orange-200 disabled:opacity-50"
       >
         <Camera size={14} />
         {uploading ? 'Uploading...' : 'Take Photo'}

@@ -18,7 +18,7 @@ export function MemberAvatar({ emoji, name, size = 'md', active = true }: Member
     <div className="flex flex-col items-center gap-1">
       <div
         className={`${sizes[size]} rounded-full flex items-center justify-center ${
-          active ? 'bg-purple-100' : 'bg-gray-100 opacity-50'
+          active ? 'bg-orange-100' : 'bg-gray-100 opacity-50'
         }`}
       >
         {emoji}

@@ -85,7 +85,7 @@ export function PinLogin({ onSignedIn, onSwitchToEmail }: PinLoginProps) {
             <button
               key={m.id}
               onClick={() => setSelected(m)}
-              className="flex flex-col items-center gap-2 p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition"
+              className="flex flex-col items-center gap-2 p-4 bg-orange-50 rounded-xl hover:bg-orange-100 transition"
             >
               <span className="text-4xl">{m.avatar_emoji}</span>
               <span className="text-sm font-medium text-gray-700">{m.display_name}</span>
@@ -94,7 +94,7 @@ export function PinLogin({ onSignedIn, onSwitchToEmail }: PinLoginProps) {
         </div>
         <button
           onClick={onSwitchToEmail}
-          className="block mx-auto text-sm text-purple-600 hover:underline"
+          className="block mx-auto text-sm text-orange-500 hover:underline"
         >
           Use email instead
         </button>
@@ -124,7 +124,7 @@ export function PinLogin({ onSignedIn, onSwitchToEmail }: PinLoginProps) {
           <div
             key={i}
             className={`w-4 h-4 rounded-full ${
-              i < pin.length ? 'bg-purple-600' : 'bg-gray-200'
+              i < pin.length ? 'bg-orange-500' : 'bg-gray-200'
             }`}
           />
         ))}

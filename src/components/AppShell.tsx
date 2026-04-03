@@ -54,8 +54,11 @@ export function AppShell({ children }: AppShellProps) {
   return (
     <div className="min-h-screen pb-16">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-purple-700 text-white px-4 py-3 flex items-center justify-between">
-        <h1 className="text-lg font-bold">💩 Duty</h1>
+      <header className="sticky top-0 z-40 bg-blue-600 text-white px-4 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <img src="/logo.png" alt="Duty" className="h-8 w-8 rounded-full" />
+          <span className="text-lg font-bold">Duty</span>
+        </div>
         <div className="flex items-center gap-3">
           <span className="text-sm opacity-80">{member.display_name}</span>
           <button
@@ -104,7 +107,7 @@ export function AppShell({ children }: AppShellProps) {
               key={tab.path}
               onClick={() => router.push(tab.path)}
               className={`flex-1 flex flex-col items-center py-2 text-xs ${
-                active ? 'text-purple-700 font-medium' : 'text-gray-400'
+                active ? 'text-orange-500 font-medium' : 'text-gray-400'
               }`}
             >
               <tab.icon size={20} />
@@ -165,7 +168,7 @@ function SetupFamily({ userId, onComplete }: { userId: string; onComplete: () =>
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-gray-50">
       <div className="w-full max-w-sm">
-        <h1 className="text-3xl font-bold text-purple-700 text-center mb-2">💩 Duty</h1>
+        <img src="/logo.png" alt="Duty" className="h-24 w-24 mx-auto mb-2" />
         <p className="text-gray-500 text-center text-sm mb-8">Set up your family</p>
 
         <form onSubmit={handleSetup} className="space-y-4">
@@ -175,7 +178,7 @@ function SetupFamily({ userId, onComplete }: { userId: string; onComplete: () =>
               value={familyName}
               onChange={e => setFamilyName(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
             />
           </div>
           <div>
@@ -185,13 +188,13 @@ function SetupFamily({ userId, onComplete }: { userId: string; onComplete: () =>
               onChange={e => setDisplayName(e.target.value)}
               required
               placeholder="Dad, Mom, etc."
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
             />
           </div>
           <button
             type="submit"
             disabled={saving}
-            className="w-full py-2.5 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 disabled:opacity-50"
+            className="w-full py-2.5 bg-orange-500 text-white rounded-lg text-sm font-medium hover:bg-orange-600 disabled:opacity-50"
           >
             {saving ? 'Setting up...' : 'Create Family'}
           </button>

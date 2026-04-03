@@ -35,7 +35,7 @@ export function RewardCard({ reward, balance, onRedeem, isParent, onEdit }: Rewa
           disabled={!canAfford}
           className={`flex-1 py-2 rounded-lg text-sm font-medium transition ${
             canAfford
-              ? 'bg-purple-600 text-white hover:bg-purple-700'
+              ? 'bg-orange-500 text-white hover:bg-orange-600'
               : 'bg-gray-100 text-gray-400 cursor-not-allowed'
           }`}
         >

@@ -6,7 +6,9 @@ export const metadata: Metadata = {
   description: 'Family chores tracker — because everyone has a duty to do',
   icons: {
     icon: '/favicon.png',
+    apple: '/apple-touch-icon.png',
   },
+  themeColor: '#2563eb',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
