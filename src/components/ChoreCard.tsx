@@ -89,9 +89,9 @@ export function ChoreCard({
   }
 
   return (
-    <div className={`rounded-xl border p-4 ${done ? 'bg-green-50 border-green-200' : 'bg-white border-gray-200'}`}>
+    <div className={`rounded-2xl p-4 transition-all ${done ? 'bg-green-50 border border-green-200/60 shadow-sm' : 'bg-white border border-gray-100 shadow-sm'}`}>
       <div className="flex items-center justify-between mb-2">
-        <div className={`font-medium ${done ? 'line-through text-gray-400' : 'text-gray-900'}`}>
+        <div className={`font-semibold tracking-tight ${done ? 'line-through text-gray-400' : 'text-gray-900'}`}>
           {chore.name}
         </div>
         <PointsDisplay points={chore.points} size="sm" />
@@ -114,11 +114,11 @@ export function ChoreCard({
           <button
             onClick={handleCheckOff}
             disabled={!isAssignedToMe && !isParent}
-            className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition ${
+            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
               completion?.checked_off
-                ? 'bg-green-100 text-green-700'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            } disabled:opacity-40 disabled:cursor-not-allowed`}
+                ? 'bg-green-100 text-green-700 shadow-sm'
+                : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+            } disabled:opacity-30 disabled:cursor-not-allowed`}
           >
             <Check size={14} />
             {completion?.checked_off ? 'Done' : 'Mark Done'}

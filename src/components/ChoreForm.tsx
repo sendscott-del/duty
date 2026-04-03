@@ -61,11 +61,11 @@ export function ChoreForm({ familyId, userId, members, chore, onSaved, onClose }
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
-      <div className="fixed inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative w-full sm:max-w-md bg-white rounded-t-2xl sm:rounded-2xl p-6 max-h-[85vh] overflow-y-auto">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold">{chore ? 'Edit Chore' : 'New Chore'}</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+      <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative w-full sm:max-w-md bg-white rounded-t-3xl sm:rounded-3xl p-6 max-h-[85vh] overflow-y-auto shadow-xl">
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="text-lg font-bold tracking-tight">{chore ? 'Edit Chore' : 'New Chore'}</h2>
+          <button onClick={onClose} className="p-1 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
             <X size={20} />
           </button>
         </div>
@@ -77,7 +77,7 @@ export function ChoreForm({ familyId, userId, members, chore, onSaved, onClose }
               value={name}
               onChange={e => setName(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-orange-400 transition-shadow"
               placeholder="e.g., Take out trash"
             />
           </div>
@@ -87,7 +87,7 @@ export function ChoreForm({ familyId, userId, members, chore, onSaved, onClose }
             <input
               value={description}
               onChange={e => setDescription(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-orange-400 transition-shadow"
               placeholder="Any extra details"
             />
           </div>
@@ -101,7 +101,7 @@ export function ChoreForm({ familyId, userId, members, chore, onSaved, onClose }
                 max={100}
                 value={points}
                 onChange={e => setPoints(Number(e.target.value))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-orange-400 transition-shadow"
               />
             </div>
             <div className="flex-1">
@@ -109,7 +109,7 @@ export function ChoreForm({ familyId, userId, members, chore, onSaved, onClose }
               <select
                 value={frequency}
                 onChange={e => setFrequency(e.target.value as 'daily' | 'weekly')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-orange-400 transition-shadow"
               >
                 <option value="daily">Daily</option>
                 <option value="weekly">Weekly</option>
@@ -123,7 +123,7 @@ export function ChoreForm({ familyId, userId, members, chore, onSaved, onClose }
               <select
                 value={dayOfWeek ?? ''}
                 onChange={e => setDayOfWeek(e.target.value ? Number(e.target.value) : null)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-orange-400 transition-shadow"
               >
                 <option value="">Any day this week</option>
                 {DAYS.map((day, i) => (
@@ -138,7 +138,7 @@ export function ChoreForm({ familyId, userId, members, chore, onSaved, onClose }
             <select
               value={assignedTo}
               onChange={e => setAssignedTo(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-orange-400 transition-shadow"
             >
               <option value="">Unassigned</option>
               {activeChildren.map(m => (
@@ -184,7 +184,7 @@ export function ChoreForm({ familyId, userId, members, chore, onSaved, onClose }
           <button
             type="submit"
             disabled={saving}
-            className="w-full py-2.5 bg-orange-500 text-white rounded-lg text-sm font-medium hover:bg-orange-600 disabled:opacity-50"
+            className="w-full py-2.5 bg-orange-500 text-white rounded-xl text-sm font-semibold hover:bg-orange-600 disabled:opacity-50 transition-colors shadow-sm shadow-orange-500/20"
           >
             {saving ? 'Saving...' : chore ? 'Update Chore' : 'Create Chore'}
           </button>

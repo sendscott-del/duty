@@ -109,7 +109,7 @@ export function MemberManager({ familyId, members, onUpdated }: MemberManagerPro
               value={name}
               onChange={e => setName(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-orange-400 transition-shadow"
             />
           </div>
           <div>
@@ -119,7 +119,7 @@ export function MemberManager({ familyId, members, onUpdated }: MemberManagerPro
               value={pin}
               onChange={e => setPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
               maxLength={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-orange-400 transition-shadow"
               placeholder="Optional"
             />
           </div>

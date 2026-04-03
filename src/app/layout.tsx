@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   },
   appleWebApp: {
     capable: true,
-    statusBarStyle: 'default',
+    statusBarStyle: 'black-translucent',
     title: 'Duty',
   },
 }
@@ -20,13 +20,13 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: '#2563eb',
+  themeColor: '#f47b20',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-white">
+      <body className="min-h-screen bg-[#f8f9fa]">
         {children}
       </body>
     </html>

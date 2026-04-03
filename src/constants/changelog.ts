@@ -1,4 +1,4 @@
-export const APP_VERSION = '0.2.0'
+export const APP_VERSION = '0.2.1'
 
 export interface ChangelogEntry {
   version: string
@@ -8,6 +8,20 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '0.2.1',
+    date: '2026-04-03',
+    enhancements: [
+      'Complete visual overhaul — Apple-quality design language',
+      'Frosted glass header and tab bar with backdrop blur',
+      'Properly cropped and optimized logo (no more squishing)',
+      'Refined cards with subtle shadows and rounded corners',
+      'Updated font stack (SF Pro / system fonts)',
+      'Consistent input and button styling across all forms',
+      'Smoother modal animations with backdrop blur',
+      'Better spacing, typography, and color consistency',
+    ],
+  },
   {
     version: '0.2.0',
     date: '2026-04-03',

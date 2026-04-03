@@ -14,9 +14,9 @@ interface RedemptionModalProps {
 export function RedemptionModal({ reward, balance, onConfirm, onClose }: RedemptionModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-      <div className="fixed inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative bg-white rounded-2xl p-6 w-full max-w-sm text-center">
-        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+      <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative bg-white rounded-3xl p-6 w-full max-w-sm text-center shadow-xl">
+        <button onClick={onClose} className="absolute top-4 right-4 p-1 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
           <X size={20} />
         </button>
 

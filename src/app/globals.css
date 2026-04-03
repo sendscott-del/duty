@@ -3,24 +3,23 @@
 :root {
   --color-primary: #f47b20;
   --color-primary-dark: #d96a15;
-  --color-accent: #3b82c4;
-  --color-accent-dark: #2d6aa0;
-  --color-success: #22c55e;
-  --color-warning: #f59e0b;
-  --color-danger: #ef4444;
-  --color-pending: #f59e0b;
-  --color-approved: #22c55e;
-  --color-rejected: #ef4444;
+  --color-accent: #2563eb;
+  --color-accent-dark: #1d4ed8;
+  --color-success: #34d399;
+  --color-warning: #fbbf24;
+  --color-danger: #f87171;
 }
 
 body {
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: -apple-system, 'SF Pro Display', 'SF Pro Text', system-ui, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #ffffff;
-  color: #111827;
+  background: #f8f9fa;
+  color: #1a1a1a;
+  letter-spacing: -0.01em;
 }
 
+/* Prevent text selection on interactive elements */
 .cell-tap {
   -webkit-user-select: none;
   user-select: none;
