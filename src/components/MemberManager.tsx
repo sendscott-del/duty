@@ -31,7 +31,16 @@ export function MemberManager({ familyId, members, onUpdated }: MemberManagerPro
     setSaving(true)
     setError('')
 
+    // Save parent's session before creating child account
+    const { data: { session: parentSession } } = await supabase.auth.getSession()
+    if (!parentSession) {
+      setError('Could not get current session')
+      setSaving(false)
+      return
+    }
+
     // Create Supabase auth account for the child
+    // This will auto-sign-in as the child, so we restore parent session after
     const { data: authData, error: authErr } = await supabase.auth.signUp({
       email,
       password,
@@ -39,17 +48,30 @@ export function MemberManager({ familyId, members, onUpdated }: MemberManagerPro
     })
 
     if (authErr || !authData.user) {
+      // Restore parent session in case it was disrupted
+      await supabase.auth.setSession({
+        access_token: parentSession.access_token,
+        refresh_token: parentSession.refresh_token,
+      })
       setError(authErr?.message || 'Failed to create account')
       setSaving(false)
       return
     }
 
-    // Add as family member
+    const childUserId = authData.user.id
+
+    // Restore parent session immediately
+    await supabase.auth.setSession({
+      access_token: parentSession.access_token,
+      refresh_token: parentSession.refresh_token,
+    })
+
+    // Add child as family member (now running as parent again)
     const { error: memErr } = await supabase
       .from('chores_family_members')
       .insert({
         family_id: familyId,
-        user_id: authData.user.id,
+        user_id: childUserId,
         display_name: name,
         role: 'child',
         avatar_emoji: emoji,
