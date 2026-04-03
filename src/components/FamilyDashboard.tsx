@@ -54,7 +54,8 @@ export function FamilyDashboard() {
         challenge={challenge}
         progress={challengeProgress}
         isParent={true}
-        onGenerate={generateChallenge}
+        onGenerate={() => generateChallenge()}
+        onSelectTemplate={(i) => generateChallenge(i)}
       />
 
       {/* Kids overview */}

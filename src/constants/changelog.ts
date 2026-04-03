@@ -1,4 +1,4 @@
-export const APP_VERSION = '0.2.1'
+export const APP_VERSION = '0.2.2'
 
 export interface ChangelogEntry {
   version: string
@@ -8,6 +8,21 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '0.2.2',
+    date: '2026-04-03',
+    enhancements: [
+      'Day navigation — browse past days to see chore completion history',
+      'Profile switching now persists across pages (was resetting)',
+      'Release notes page (Settings menu → Release Notes)',
+      'Weekly challenges are now selectable — parents can pick from templates or change mid-week',
+      'Expanded emoji picker for rewards with 60+ emojis in 5 categories',
+    ],
+    bugFixes: [
+      'Profile switch no longer redirects to home page',
+      'Active profile persists in localStorage across page navigation',
+    ],
+  },
   {
     version: '0.2.1',
     date: '2026-04-03',

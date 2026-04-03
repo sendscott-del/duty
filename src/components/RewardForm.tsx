@@ -13,7 +13,13 @@ interface RewardFormProps {
   onClose: () => void
 }
 
-const EMOJIS = ['🎮', '🍕', '🎬', '📱', '🍦', '🎁', '⭐', '🏖️', '🛍️', '💵', '🎯', '🎪']
+const EMOJI_CATEGORIES: Record<string, string[]> = {
+  'Food & Treats': ['🍕', '🍦', '🍪', '🍩', '🧁', '🍫', '🍿', '🥤', '🍔', '🌮', '🍰', '🧇'],
+  'Activities': ['🎬', '🎮', '🏖️', '🎳', '🎪', '⛷️', '🎢', '🏊', '🚴', '⚽', '🎯', '🛝'],
+  'Screen Time': ['📱', '💻', '🎮', '📺', '🕹️', '🎧'],
+  'Shopping': ['🛍️', '👟', '👕', '🧸', '📚', '🎁', '💵', '💳', '🛒'],
+  'Special': ['⭐', '🌟', '🏆', '👑', '🎉', '🦄', '🐶', '🎨', '🚗', '✈️', '🏠', '❤️'],
+}
 
 export function RewardForm({ familyId, userId, reward, onSaved, onClose }: RewardFormProps) {
   const [name, setName] = useState(reward?.name || '')
@@ -89,19 +95,26 @@ export function RewardForm({ familyId, userId, reward, onSaved, onClose }: Rewar
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Icon</label>
-            <div className="flex flex-wrap gap-2">
-              {EMOJIS.map(e => (
-                <button
-                  key={e}
-                  type="button"
-                  onClick={() => setEmoji(e)}
-                  className={`w-10 h-10 rounded-lg text-xl flex items-center justify-center ${
-                    emoji === e ? 'bg-orange-100 ring-2 ring-orange-500' : 'bg-gray-100 hover:bg-gray-200'
-                  }`}
-                >
-                  {e}
-                </button>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Icon</label>
+            <div className="space-y-3 max-h-48 overflow-y-auto">
+              {Object.entries(EMOJI_CATEGORIES).map(([category, emojis]) => (
+                <div key={category}>
+                  <div className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">{category}</div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {emojis.map(e => (
+                      <button
+                        key={`${category}-${e}`}
+                        type="button"
+                        onClick={() => setEmoji(e)}
+                        className={`w-9 h-9 rounded-xl text-lg flex items-center justify-center transition-all ${
+                          emoji === e ? 'bg-orange-100 ring-2 ring-orange-500 scale-110' : 'bg-gray-50 hover:bg-gray-100'
+                        }`}
+                      >
+                        {e}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           </div>

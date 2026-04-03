@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useFamilyMember } from '@/lib/hooks/useFamilyMember'
-import { LayoutDashboard, ListChecks, Gift, Clock, Settings, LogOut } from 'lucide-react'
+import { LayoutDashboard, ListChecks, Gift, Clock, Settings, LogOut, FileText } from 'lucide-react'
 
 interface AppShellProps {
   children: React.ReactNode
@@ -89,7 +89,6 @@ export function AppShell({ children }: AppShellProps) {
                 onClick={() => {
                   switchProfile(m)
                   setShowProfilePicker(false)
-                  router.push('/')
                 }}
                 className={`w-full text-left px-4 py-2.5 text-sm flex items-center gap-3 transition-colors ${
                   m.id === member.id ? 'bg-orange-50 text-orange-700 font-medium' : 'hover:bg-gray-50 text-gray-700'
@@ -117,6 +116,12 @@ export function AppShell({ children }: AppShellProps) {
                 <Settings size={16} className="text-gray-400" /> Settings
               </button>
             )}
+            <button
+              onClick={() => { router.push('/release-notes'); setShowMenu(false) }}
+              className="w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 flex items-center gap-3 text-gray-700 transition-colors"
+            >
+              <FileText size={16} className="text-gray-400" /> Release Notes
+            </button>
             <button
               onClick={async () => { await signOut(); router.push('/login') }}
               className="w-full text-left px-4 py-2.5 text-sm hover:bg-red-50 flex items-center gap-3 text-red-500 transition-colors"

@@ -14,7 +14,9 @@ import { BadgeCase } from './BadgeCase'
 import { BadgeUnlockToast } from './BadgeUnlockToast'
 import { LevelUpModal } from './LevelUpModal'
 import { WeeklyChallenge } from './WeeklyChallenge'
+import { DayNavigator } from './DayNavigator'
 import { todayStr, isDueToday, formatDisplay, completionKey } from '@/lib/dates'
+import { format, isToday, getDay } from 'date-fns'
 import { isChoreComplete } from '@/lib/points'
 import type { Completion } from '@/lib/types'
 
@@ -30,21 +32,30 @@ export function KidDashboard({ memberId }: KidDashboardProps) {
   const { challenge } = useChallenges(family?.id)
   const [levelUp, setLevelUp] = useState<number | null>(null)
   const [showBadges, setShowBadges] = useState(false)
+  const [viewDate, setViewDate] = useState(new Date())
 
   if (loading || !family || !member) {
     return <div className="text-gray-400 text-sm text-center py-8">Loading...</div>
   }
 
-  const today = todayStr()
+  const dateStr = format(viewDate, 'yyyy-MM-dd')
+  const viewingToday = isToday(viewDate)
   const balance = getBalance(memberId)
   const currentMember = allMembers.find(m => m.id === memberId) || member
 
+  // Filter chores due on the viewed date
+  const isDueOnDate = (frequency: string, dayOfWeek: number | null) => {
+    if (frequency === 'daily') return true
+    if (frequency === 'weekly' && dayOfWeek !== null) return getDay(viewDate) === dayOfWeek
+    return frequency === 'weekly'
+  }
+
   const myChores = chores.filter(c =>
-    c.assigned_to === memberId && isDueToday(c.frequency, c.day_of_week)
+    c.assigned_to === memberId && isDueOnDate(c.frequency, c.day_of_week)
   )
 
   const doneCount = myChores.filter(c => {
-    const key = completionKey(c.id, memberId, today)
+    const key = completionKey(c.id, memberId, dateStr)
     return isChoreComplete(completions.get(key), c.require_checkoff, c.require_photo, c.require_approval)
   }).length
 
@@ -67,7 +78,7 @@ export function KidDashboard({ memberId }: KidDashboardProps) {
       // Check if all chores done today → streak + clean sweep
       const updatedDone = myChores.filter(c => {
         if (c.id === choreId) return true
-        const key = completionKey(c.id, memberId, today)
+        const key = completionKey(c.id, memberId, dateStr)
         return isChoreComplete(completions.get(key), c.require_checkoff, c.require_photo, c.require_approval)
       }).length
 
@@ -89,14 +100,18 @@ export function KidDashboard({ memberId }: KidDashboardProps) {
         <div className="flex items-center gap-3">
           <LevelIndicator level={currentMember.level} xp={currentMember.xp} size="md" />
           <div>
-            <h2 className="text-xl font-bold">My Chores</h2>
+            <h2 className="text-xl font-bold tracking-tight">My Chores</h2>
             <div className="flex items-center gap-2 mt-0.5">
               <StreakBadge streak={currentMember.current_streak} size="sm" />
-              <span className="text-xs text-gray-400">{formatDisplay(new Date())}</span>
             </div>
           </div>
         </div>
         <PointsDisplay points={balance} size="lg" />
+      </div>
+
+      {/* Day navigation */}
+      <div className="flex justify-center">
+        <DayNavigator date={viewDate} onDateChange={setViewDate} />
       </div>
 
       {/* Progress bar */}
@@ -128,7 +143,7 @@ export function KidDashboard({ memberId }: KidDashboardProps) {
         currentMemberId={memberId}
         isParent={isParent}
         familyId={family.id}
-        date={today}
+        date={dateStr}
         onUpsert={handleUpsert}
       />
 

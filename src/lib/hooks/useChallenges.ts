@@ -34,13 +34,20 @@ export function useChallenges(familyId: string | undefined) {
     fetchChallenge()
   }, [fetchChallenge])
 
-  // Generate a new weekly challenge (parent action)
-  const generateChallenge = async () => {
+  // Generate a new weekly challenge from a specific template or random
+  const generateChallenge = async (templateIndex?: number) => {
     if (!familyId) return
 
-    const template = CHALLENGE_TEMPLATES[Math.floor(Math.random() * CHALLENGE_TEMPLATES.length)]
+    const template = templateIndex !== undefined
+      ? CHALLENGE_TEMPLATES[templateIndex]
+      : CHALLENGE_TEMPLATES[Math.floor(Math.random() * CHALLENGE_TEMPLATES.length)]
 
-    const { data, error } = await supabase
+    // Delete existing challenge for this week if changing
+    if (challenge) {
+      await supabase.from('chores_challenges').delete().eq('id', challenge.id)
+    }
+
+    const { data } = await supabase
       .from('chores_challenges')
       .insert({
         family_id: familyId,
