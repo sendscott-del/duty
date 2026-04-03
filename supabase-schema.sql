@@ -12,14 +12,14 @@ CREATE TABLE chores_families (
 CREATE TABLE chores_family_members (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   family_id UUID NOT NULL REFERENCES chores_families(id) ON DELETE CASCADE,
-  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,  -- null for child profiles
   display_name TEXT NOT NULL,
   role TEXT NOT NULL CHECK (role IN ('parent', 'child')),
   avatar_emoji TEXT NOT NULL DEFAULT '😊',
   pin TEXT,
   is_active BOOLEAN NOT NULL DEFAULT true,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  UNIQUE(family_id, user_id)
+  UNIQUE(family_id, user_id)  -- only applies when user_id is not null
 );
 
 -- Chores definitions
@@ -128,9 +128,12 @@ CREATE POLICY "Members see own family members"
   ON chores_family_members FOR SELECT
   USING (family_id IN (SELECT chores_get_my_family_ids()));
 
-CREATE POLICY "Members insert own record"
+CREATE POLICY "Members insert into own family or self"
   ON chores_family_members FOR INSERT
-  WITH CHECK (user_id = auth.uid());
+  WITH CHECK (
+    user_id = auth.uid()
+    OR family_id IN (SELECT chores_get_my_family_ids())
+  );
 
 CREATE POLICY "Members update in own family"
   ON chores_family_members FOR UPDATE

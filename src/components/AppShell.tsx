@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useFamilyMember } from '@/lib/hooks/useFamilyMember'
-import { LayoutDashboard, ListChecks, Gift, Clock, Settings, LogOut } from 'lucide-react'
+import { LayoutDashboard, ListChecks, Gift, Clock, Settings, LogOut, Users } from 'lucide-react'
 
 interface AppShellProps {
   children: React.ReactNode
@@ -12,8 +12,9 @@ interface AppShellProps {
 export function AppShell({ children }: AppShellProps) {
   const router = useRouter()
   const pathname = usePathname()
-  const { user, member, family, isParent, loading, signOut } = useFamilyMember()
+  const { user, member, family, isParent, allMembers, loading, signOut, switchProfile } = useFamilyMember()
   const [showMenu, setShowMenu] = useState(false)
+  const [showProfilePicker, setShowProfilePicker] = useState(false)
 
   useEffect(() => {
     if (!loading && !user) {
@@ -60,7 +61,14 @@ export function AppShell({ children }: AppShellProps) {
           <span className="text-lg font-bold">Duty</span>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-sm opacity-80">{member.display_name}</span>
+          {/* Profile switcher button */}
+          <button
+            onClick={() => setShowProfilePicker(!showProfilePicker)}
+            className="flex items-center gap-1 text-sm opacity-90 hover:opacity-100"
+          >
+            <span>{member.avatar_emoji}</span>
+            <span>{member.display_name}</span>
+          </button>
           <button
             onClick={() => setShowMenu(!showMenu)}
             className="text-sm opacity-80 hover:opacity-100"
@@ -70,7 +78,34 @@ export function AppShell({ children }: AppShellProps) {
         </div>
       </header>
 
-      {/* Dropdown menu */}
+      {/* Profile picker dropdown */}
+      {showProfilePicker && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setShowProfilePicker(false)} />
+          <div className="fixed right-2 top-12 z-50 bg-white rounded-lg shadow-lg border py-2 min-w-[180px]">
+            <div className="px-3 pb-1 text-xs text-gray-400 font-medium">Switch Profile</div>
+            {allMembers.filter(m => m.is_active).map(m => (
+              <button
+                key={m.id}
+                onClick={() => {
+                  switchProfile(m)
+                  setShowProfilePicker(false)
+                  router.push('/')
+                }}
+                className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2 ${
+                  m.id === member.id ? 'bg-orange-50 font-medium' : ''
+                }`}
+              >
+                <span className="text-lg">{m.avatar_emoji}</span>
+                {m.display_name}
+                {m.role === 'parent' && <span className="text-xs text-gray-400 ml-auto">Parent</span>}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* Settings menu */}
       {showMenu && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />

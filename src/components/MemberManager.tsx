@@ -1,9 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Plus, X, UserMinus, UserCheck } from 'lucide-react'
+import { Plus, UserMinus, UserCheck } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
-import { MemberAvatar } from './MemberAvatar'
 import type { FamilyMember } from '@/lib/types'
 
 interface MemberManagerProps {
@@ -17,8 +16,6 @@ const AVATARS = ['👦', '👧', '👨', '👩', '🧒', '👶', '🧑', '😎',
 export function MemberManager({ familyId, members, onUpdated }: MemberManagerProps) {
   const [showAdd, setShowAdd] = useState(false)
   const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [pin, setPin] = useState('')
   const [emoji, setEmoji] = useState('👦')
   const [saving, setSaving] = useState(false)
@@ -31,47 +28,12 @@ export function MemberManager({ familyId, members, onUpdated }: MemberManagerPro
     setSaving(true)
     setError('')
 
-    // Save parent's session before creating child account
-    const { data: { session: parentSession } } = await supabase.auth.getSession()
-    if (!parentSession) {
-      setError('Could not get current session')
-      setSaving(false)
-      return
-    }
-
-    // Create Supabase auth account for the child
-    // This will auto-sign-in as the child, so we restore parent session after
-    const { data: authData, error: authErr } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { data: { display_name: name } },
-    })
-
-    if (authErr || !authData.user) {
-      // Restore parent session in case it was disrupted
-      await supabase.auth.setSession({
-        access_token: parentSession.access_token,
-        refresh_token: parentSession.refresh_token,
-      })
-      setError(authErr?.message || 'Failed to create account')
-      setSaving(false)
-      return
-    }
-
-    const childUserId = authData.user.id
-
-    // Restore parent session immediately
-    await supabase.auth.setSession({
-      access_token: parentSession.access_token,
-      refresh_token: parentSession.refresh_token,
-    })
-
-    // Add child as family member (now running as parent again)
+    // Just insert a profile record — no auth account needed for kids
     const { error: memErr } = await supabase
       .from('chores_family_members')
       .insert({
         family_id: familyId,
-        user_id: childUserId,
+        user_id: null,
         display_name: name,
         role: 'child',
         avatar_emoji: emoji,
@@ -86,8 +48,6 @@ export function MemberManager({ familyId, members, onUpdated }: MemberManagerPro
 
     setShowAdd(false)
     setName('')
-    setEmail('')
-    setPassword('')
     setPin('')
     setSaving(false)
     onUpdated()
@@ -153,34 +113,12 @@ export function MemberManager({ familyId, members, onUpdated }: MemberManagerPro
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Password</label>
-            <input
-              type="text"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-              minLength={6}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-            />
-          </div>
-          <div>
             <label className="block text-xs font-medium text-gray-700 mb-1">PIN (4 digits, for quick login)</label>
             <input
               type="text"
               value={pin}
               onChange={e => setPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
               maxLength={4}
-              pattern="\d{4}"
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
               placeholder="Optional"
             />

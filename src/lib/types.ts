@@ -7,7 +7,7 @@ export interface Family {
 export interface FamilyMember {
   id: string
   family_id: string
-  user_id: string
+  user_id: string | null
   display_name: string
   role: 'parent' | 'child'
   avatar_emoji: string

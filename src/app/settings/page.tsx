@@ -1,15 +1,12 @@
 'use client'
 
-import { useState } from 'react'
 import { AppShell } from '@/components/AppShell'
 import { MemberManager } from '@/components/MemberManager'
 import { useFamilyMember } from '@/lib/hooks/useFamilyMember'
-import { useChoresData } from '@/lib/hooks/useChoresData'
 import { APP_VERSION } from '@/constants/changelog'
 
 export default function SettingsPage() {
-  const { user, member, family, isParent } = useFamilyMember()
-  const { members, refresh } = useChoresData(family?.id)
+  const { user, member, family, isParent, allMembers, refresh } = useFamilyMember()
 
   if (!family || !member || !user) {
     return <AppShell><div className="text-gray-400 text-sm text-center py-8">Loading...</div></AppShell>
@@ -37,7 +34,7 @@ export default function SettingsPage() {
         {isParent && (
           <MemberManager
             familyId={family.id}
-            members={members}
+            members={allMembers}
             onUpdated={refresh}
           />
         )}
