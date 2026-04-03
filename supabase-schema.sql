@@ -103,45 +103,59 @@ ALTER TABLE chores_completions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE chores_rewards ENABLE ROW LEVEL SECURITY;
 ALTER TABLE chores_redemptions ENABLE ROW LEVEL SECURITY;
 
--- RLS Policies: family-scoped access
+-- Helper function to get current user's family IDs (SECURITY DEFINER bypasses RLS)
+CREATE OR REPLACE FUNCTION chores_get_my_family_ids()
+RETURNS SETOF UUID
+LANGUAGE sql
+SECURITY DEFINER
+STABLE
+SET search_path = ''
+AS $$
+  SELECT family_id FROM public.chores_family_members WHERE user_id = auth.uid();
+$$;
+
+-- Families: read own, anyone can create
 CREATE POLICY "Family members access own family"
-  ON chores_families FOR ALL
-  USING (id IN (SELECT family_id FROM chores_family_members WHERE user_id = auth.uid()));
+  ON chores_families FOR SELECT
+  USING (id IN (SELECT chores_get_my_family_ids()));
 
-CREATE POLICY "Family members access own family members"
-  ON chores_family_members FOR ALL
-  USING (family_id IN (SELECT family_id FROM chores_family_members WHERE user_id = auth.uid()));
-
-CREATE POLICY "Family members access own family chores"
-  ON chores_chores FOR ALL
-  USING (family_id IN (SELECT family_id FROM chores_family_members WHERE user_id = auth.uid()));
-
-CREATE POLICY "Family members access own family completions"
-  ON chores_completions FOR ALL
-  USING (chore_id IN (
-    SELECT id FROM chores_chores WHERE family_id IN (
-      SELECT family_id FROM chores_family_members WHERE user_id = auth.uid()
-    )
-  ));
-
-CREATE POLICY "Family members access own family rewards"
-  ON chores_rewards FOR ALL
-  USING (family_id IN (SELECT family_id FROM chores_family_members WHERE user_id = auth.uid()));
-
-CREATE POLICY "Family members access own family redemptions"
-  ON chores_redemptions FOR ALL
-  USING (member_id IN (
-    SELECT id FROM chores_family_members WHERE family_id IN (
-      SELECT family_id FROM chores_family_members WHERE user_id = auth.uid()
-    )
-  ));
-
--- Allow new users to create a family (no existing membership yet)
 CREATE POLICY "Authenticated users can create families"
   ON chores_families FOR INSERT
   WITH CHECK (auth.uid() IS NOT NULL);
 
--- Allow new users to add themselves as first member
-CREATE POLICY "Authenticated users can join family"
+-- Family members: read own family, insert self, update own family
+CREATE POLICY "Members see own family members"
+  ON chores_family_members FOR SELECT
+  USING (family_id IN (SELECT chores_get_my_family_ids()));
+
+CREATE POLICY "Members insert own record"
   ON chores_family_members FOR INSERT
   WITH CHECK (user_id = auth.uid());
+
+CREATE POLICY "Members update in own family"
+  ON chores_family_members FOR UPDATE
+  USING (family_id IN (SELECT chores_get_my_family_ids()));
+
+-- Chores: full access within own family
+CREATE POLICY "Family members access own family chores"
+  ON chores_chores FOR ALL
+  USING (family_id IN (SELECT chores_get_my_family_ids()));
+
+-- Completions: full access within own family's chores
+CREATE POLICY "Family members access own family completions"
+  ON chores_completions FOR ALL
+  USING (chore_id IN (
+    SELECT id FROM chores_chores WHERE family_id IN (SELECT chores_get_my_family_ids())
+  ));
+
+-- Rewards: full access within own family
+CREATE POLICY "Family members access own family rewards"
+  ON chores_rewards FOR ALL
+  USING (family_id IN (SELECT chores_get_my_family_ids()));
+
+-- Redemptions: full access within own family
+CREATE POLICY "Family members access own family redemptions"
+  ON chores_redemptions FOR ALL
+  USING (member_id IN (
+    SELECT id FROM chores_family_members WHERE family_id IN (SELECT chores_get_my_family_ids())
+  ));
