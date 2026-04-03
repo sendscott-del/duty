@@ -69,14 +69,14 @@ CREATE POLICY "Family members access own challenges"
 
 -- Seed badge definitions
 INSERT INTO chores_badges (slug, name, description, emoji, category, threshold, sort_order) VALUES
-  ('first-duty',  'First Duty',    'Complete your first chore',           '⭐', 'milestone', 1,   1),
-  ('streak-3',    'Hot Streak',    'Complete all chores 3 days in a row', '🔥', 'streak',    3,   2),
-  ('streak-7',    'Week Warrior',  'Complete all chores 7 days in a row', '💪', 'streak',    7,   3),
-  ('streak-14',   'Unstoppable',   '14-day streak — nothing can stop you','🌋', 'streak',    14,  4),
-  ('streak-30',   'Streak Master', '30 days straight. Legendary.',        '👑', 'streak',    30,  5),
-  ('photo-5',     'Shutterbug',    'Submit 5 photo proofs',               '📸', 'milestone', 5,   6),
-  ('points-100',  'Hundo Club',    'Earn 100 total XP',                   '💯', 'milestone', 100, 7),
-  ('points-500',  'Point Stacker', 'Earn 500 total XP',                   '💰', 'milestone', 500, 8),
-  ('clean-sweep', 'Clean Sweep',   'Complete all your chores in one day', '🧹', 'special',   NULL, 9),
-  ('early-bird',  'Early Bird',    'Complete a chore before 8am',         '🐦', 'special',   NULL, 10),
-  ('team-player', 'Team Player',   'Help out with 5 chores not assigned to you', '🤝', 'special', 5, 11);
+  ('first-duty',  'First Flush',       'Complete your very first duty',              '🚽', 'milestone', 1,   1),
+  ('streak-3',    'Hot Streak',        'You''re on a roll! 3 days in a row',        '🔥', 'streak',    3,   2),
+  ('streak-7',    'Dump Truck',        '7 days of duties. You''re hauling!',        '🚛', 'streak',    7,   3),
+  ('streak-14',   'Unstoppable',       '14 days?! You can''t be clogged!',          '🌋', 'streak',    14,  4),
+  ('streak-30',   'Legendary Pooper',  '30 days straight. Absolute legend.',        '💩', 'streak',    30,  5),
+  ('photo-5',     'Paparazzi Poo',     'Snap 5 photo proofs. Smile!',              '📸', 'milestone', 5,   6),
+  ('points-100',  'Hundo Dump',        'Drop 100 XP. Big load!',                   '💯', 'milestone', 100, 7),
+  ('points-500',  'Mega Dump',         '500 XP?! That''s a LOT of duty.',          '🏆', 'milestone', 500, 8),
+  ('clean-sweep', 'Royal Flush',       'All chores done in one day. Spotless!',     '🧹', 'special',   NULL, 9),
+  ('early-bird',  'Dawn Dumper',       'A chore before 8am? Early riser!',          '🌅', 'special',   NULL, 10),
+  ('team-player', 'Plumber''s Helper', 'Help with 5 chores that aren''t yours',    '🔧', 'special', 5, 11);

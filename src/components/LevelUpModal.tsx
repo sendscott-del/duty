@@ -36,10 +36,10 @@ export function LevelUpModal({ level, onClose }: LevelUpModalProps) {
         <div className="text-6xl font-black text-orange-500 mb-2">{level}</div>
         <div className="text-xl font-bold text-gray-900 mb-1">Level Up!</div>
         <p className="text-sm text-gray-500">
-          {level <= 3 && "You're just getting started!"}
-          {level > 3 && level <= 7 && "Looking good! Keep it up!"}
-          {level > 7 && level <= 15 && "Seriously impressive work!"}
-          {level > 15 && "You're a total legend!"}
+          {level <= 3 && "You're just warming up the seat!"}
+          {level > 3 && level <= 7 && "Now you're really dropping duties!"}
+          {level > 7 && level <= 15 && "Seriously impressive plumbing work!"}
+          {level > 15 && "You're a Legendary Pooper. Bow down."}
         </p>
       </div>
     </div>
