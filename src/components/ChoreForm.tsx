@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { X } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { CHORE_PRESETS } from '@/constants/presets'
 import type { Chore, FamilyMember } from '@/lib/types'
 
 interface ChoreFormProps {
@@ -21,14 +22,26 @@ export function ChoreForm({ familyId, userId, members, chore, onSaved, onClose }
   const [description, setDescription] = useState(chore?.description || '')
   const [points, setPoints] = useState(chore?.points ?? 1)
   const [frequency, setFrequency] = useState<'daily' | 'weekly'>(chore?.frequency || 'daily')
-  const [dayOfWeek, setDayOfWeek] = useState<number | null>(chore?.day_of_week ?? null)
+  const [daysOfWeek, setDaysOfWeek] = useState<number[]>(() => {
+    if (!chore?.day_of_week) return []
+    if (Array.isArray(chore.day_of_week)) return chore.day_of_week
+    return [chore.day_of_week]
+  })
   const [assignedTo, setAssignedTo] = useState<string>(chore?.assigned_to || '')
   const [requireCheckoff, setRequireCheckoff] = useState(chore?.require_checkoff ?? true)
   const [requirePhoto, setRequirePhoto] = useState(chore?.require_photo ?? false)
   const [requireApproval, setRequireApproval] = useState(chore?.require_approval ?? false)
   const [saving, setSaving] = useState(false)
+  const [showPresets, setShowPresets] = useState(!chore)
 
   const activeChildren = members.filter(m => m.role === 'child' && m.is_active)
+
+  const applyPreset = (preset: typeof CHORE_PRESETS[0]) => {
+    setName(preset.name)
+    setPoints(preset.points)
+    setFrequency(preset.frequency)
+    setShowPresets(false)
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -40,7 +53,7 @@ export function ChoreForm({ familyId, userId, members, chore, onSaved, onClose }
       description: description || null,
       points,
       frequency,
-      day_of_week: frequency === 'weekly' ? dayOfWeek : null,
+      day_of_week: frequency === 'weekly' && daysOfWeek.length > 0 ? daysOfWeek : null,
       assigned_to: assignedTo || null,
       require_checkoff: requireCheckoff,
       require_photo: requirePhoto,
@@ -69,6 +82,41 @@ export function ChoreForm({ familyId, userId, members, chore, onSaved, onClose }
             <X size={20} />
           </button>
         </div>
+
+        {/* Preset picker for new chores */}
+        {showPresets && !chore && (
+          <div className="mb-5">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-sm font-semibold text-gray-700">Quick add from suggestions</span>
+              <button onClick={() => setShowPresets(false)} className="text-xs text-orange-500 font-medium">Custom chore</button>
+            </div>
+            <div className="space-y-3 max-h-64 overflow-y-auto">
+              {Object.entries(
+                CHORE_PRESETS.reduce((acc, p) => {
+                  if (!acc[p.category]) acc[p.category] = []
+                  acc[p.category].push(p)
+                  return acc
+                }, {} as Record<string, typeof CHORE_PRESETS>)
+              ).map(([cat, presets]) => (
+                <div key={cat}>
+                  <div className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">{cat}</div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {presets.map(p => (
+                      <button
+                        key={p.name}
+                        type="button"
+                        onClick={() => applyPreset(p)}
+                        className="flex items-center gap-1 px-2.5 py-1.5 bg-gray-50 hover:bg-orange-50 border border-gray-100 hover:border-orange-200 rounded-lg text-xs font-medium text-gray-700 transition-colors"
+                      >
+                        <span>{p.emoji}</span> {p.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -119,17 +167,32 @@ export function ChoreForm({ familyId, userId, members, chore, onSaved, onClose }
 
           {frequency === 'weekly' && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Day of Week</label>
-              <select
-                value={dayOfWeek ?? ''}
-                onChange={e => setDayOfWeek(e.target.value ? Number(e.target.value) : null)}
-                className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-orange-400 transition-shadow"
-              >
-                <option value="">Any day this week</option>
-                {DAYS.map((day, i) => (
-                  <option key={i} value={i}>{day}</option>
-                ))}
-              </select>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Which days?</label>
+              <div className="flex flex-wrap gap-1.5">
+                {DAYS.map((day, i) => {
+                  const selected = daysOfWeek.includes(i)
+                  return (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => {
+                        if (selected) setDaysOfWeek(daysOfWeek.filter(d => d !== i))
+                        else setDaysOfWeek([...daysOfWeek, i])
+                      }}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                        selected
+                          ? 'bg-orange-500 text-white shadow-sm'
+                          : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                      }`}
+                    >
+                      {day.slice(0, 3)}
+                    </button>
+                  )
+                })}
+              </div>
+              {daysOfWeek.length === 0 && (
+                <p className="text-xs text-gray-400 mt-1">No days selected = any day this week</p>
+              )}
             </div>
           )}
 

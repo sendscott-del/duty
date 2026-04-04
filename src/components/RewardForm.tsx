@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { X } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { REWARD_PRESETS } from '@/constants/presets'
 import type { Reward } from '@/lib/types'
 
 interface RewardFormProps {
@@ -26,6 +27,7 @@ export function RewardForm({ familyId, userId, reward, onSaved, onClose }: Rewar
   const [description, setDescription] = useState(reward?.description || '')
   const [pointCost, setPointCost] = useState(reward?.point_cost ?? 10)
   const [emoji, setEmoji] = useState(reward?.emoji || '🎁')
+  const [showPresets, setShowPresets] = useState(!reward)
   const [saving, setSaving] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
@@ -61,6 +63,41 @@ export function RewardForm({ familyId, userId, reward, onSaved, onClose }: Rewar
             <X size={20} />
           </button>
         </div>
+
+        {/* Preset picker for new rewards */}
+        {showPresets && !reward && (
+          <div className="mb-5">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-sm font-semibold text-gray-700">Quick add from suggestions</span>
+              <button onClick={() => setShowPresets(false)} className="text-xs text-orange-500 font-medium">Custom reward</button>
+            </div>
+            <div className="space-y-3 max-h-64 overflow-y-auto">
+              {Object.entries(
+                REWARD_PRESETS.reduce((acc, p) => {
+                  if (!acc[p.category]) acc[p.category] = []
+                  acc[p.category].push(p)
+                  return acc
+                }, {} as Record<string, typeof REWARD_PRESETS>)
+              ).map(([cat, presets]) => (
+                <div key={cat}>
+                  <div className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">{cat}</div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {presets.map(p => (
+                      <button
+                        key={p.name}
+                        type="button"
+                        onClick={() => { setName(p.name); setEmoji(p.emoji); setPointCost(p.points); setShowPresets(false) }}
+                        className="flex items-center gap-1 px-2.5 py-1.5 bg-gray-50 hover:bg-orange-50 border border-gray-100 hover:border-orange-200 rounded-lg text-xs font-medium text-gray-700 transition-colors"
+                      >
+                        <span>{p.emoji}</span> {p.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>

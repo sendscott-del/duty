@@ -2,13 +2,14 @@
 
 import { useState } from 'react'
 import { Plus } from 'lucide-react'
-import { format, isToday, getDay } from 'date-fns'
+import { format } from 'date-fns'
 import { AppShell } from '@/components/AppShell'
 import { ChoreList } from '@/components/ChoreList'
 import { ChoreForm } from '@/components/ChoreForm'
 import { DayNavigator } from '@/components/DayNavigator'
 import { useFamilyMember } from '@/lib/hooks/useFamilyMember'
 import { useChoresData } from '@/lib/hooks/useChoresData'
+import { isDueOnDate } from '@/lib/dates'
 import type { Chore } from '@/lib/types'
 
 export default function ChoresPage() {
@@ -24,15 +25,9 @@ export default function ChoresPage() {
 
   const dateStr = format(viewDate, 'yyyy-MM-dd')
 
-  const isDueOnDate = (frequency: string, dayOfWeek: number | null) => {
-    if (frequency === 'daily') return true
-    if (frequency === 'weekly' && dayOfWeek !== null) return getDay(viewDate) === dayOfWeek
-    return frequency === 'weekly'
-  }
-
   const visibleChores = isParent
-    ? chores.filter(c => isDueOnDate(c.frequency, c.day_of_week))
-    : chores.filter(c => c.assigned_to === member.id && isDueOnDate(c.frequency, c.day_of_week))
+    ? chores.filter(c => isDueOnDate(c.frequency, c.day_of_week, viewDate))
+    : chores.filter(c => c.assigned_to === member.id && isDueOnDate(c.frequency, c.day_of_week, viewDate))
 
   return (
     <AppShell>

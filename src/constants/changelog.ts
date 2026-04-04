@@ -1,4 +1,4 @@
-export const APP_VERSION = '0.2.2'
+export const APP_VERSION = '0.2.3'
 
 export interface ChangelogEntry {
   version: string
@@ -8,6 +8,15 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '0.2.3',
+    date: '2026-04-03',
+    enhancements: [
+      'Chore suggestions — 50+ preset chores organized by room (Kitchen, Bathroom, Bedroom, etc.)',
+      'Reward suggestions — 30+ preset rewards (Screen Time, Food, Activities, Privileges, Big Rewards)',
+      'Multi-day weekly chores — pick specific days (Mon/Wed/Fri) instead of just one',
+    ],
+  },
   {
     version: '0.2.2',
     date: '2026-04-03',

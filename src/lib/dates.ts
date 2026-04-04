@@ -22,13 +22,19 @@ export function getWeekDates(date: Date): string[] {
   return eachDayOfInterval({ start, end }).map(d => formatDate(d))
 }
 
-export function isDueToday(frequency: string, dayOfWeek: number | null): boolean {
+export function isDueToday(frequency: string, dayOfWeek: number | number[] | null): boolean {
+  return isDueOnDate(frequency, dayOfWeek, new Date())
+}
+
+export function isDueOnDate(frequency: string, dayOfWeek: number | number[] | null, date: Date): boolean {
   if (frequency === 'daily') return true
-  if (frequency === 'weekly' && dayOfWeek !== null) {
-    return getDayOfWeek(new Date()) === dayOfWeek
+  if (frequency === 'weekly') {
+    if (dayOfWeek === null) return true // any day this week
+    const dow = getDay(date)
+    if (Array.isArray(dayOfWeek)) return dayOfWeek.includes(dow)
+    return dow === dayOfWeek
   }
-  // Weekly with no specific day = due any day this week
-  return frequency === 'weekly'
+  return false
 }
 
 export function completionKey(choreId: string, memberId: string, date: string): string {

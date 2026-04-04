@@ -30,7 +30,7 @@ export interface Chore {
   description: string | null
   points: number
   frequency: ChoreFrequency
-  day_of_week: number | null
+  day_of_week: number | number[] | null
   assigned_to: string | null
   require_checkoff: boolean
   require_photo: boolean

@@ -15,8 +15,8 @@ import { BadgeUnlockToast } from './BadgeUnlockToast'
 import { LevelUpModal } from './LevelUpModal'
 import { WeeklyChallenge } from './WeeklyChallenge'
 import { DayNavigator } from './DayNavigator'
-import { todayStr, isDueToday, formatDisplay, completionKey } from '@/lib/dates'
-import { format, isToday, getDay } from 'date-fns'
+import { isDueOnDate, completionKey } from '@/lib/dates'
+import { format, isToday } from 'date-fns'
 import { isChoreComplete } from '@/lib/points'
 import type { Completion } from '@/lib/types'
 
@@ -43,15 +43,8 @@ export function KidDashboard({ memberId }: KidDashboardProps) {
   const balance = getBalance(memberId)
   const currentMember = allMembers.find(m => m.id === memberId) || member
 
-  // Filter chores due on the viewed date
-  const isDueOnDate = (frequency: string, dayOfWeek: number | null) => {
-    if (frequency === 'daily') return true
-    if (frequency === 'weekly' && dayOfWeek !== null) return getDay(viewDate) === dayOfWeek
-    return frequency === 'weekly'
-  }
-
   const myChores = chores.filter(c =>
-    c.assigned_to === memberId && isDueOnDate(c.frequency, c.day_of_week)
+    c.assigned_to === memberId && isDueOnDate(c.frequency, c.day_of_week, viewDate)
   )
 
   const doneCount = myChores.filter(c => {
