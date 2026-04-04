@@ -78,7 +78,7 @@ export function FamilyDashboard() {
               className={`rounded-xl border p-4 ${child.is_active ? 'bg-white' : 'bg-gray-50 opacity-60'}`}
             >
               <div className="flex items-start justify-between">
-                <MemberAvatar emoji={child.avatar_emoji} name={child.display_name} active={child.is_active} size="sm" />
+                <MemberAvatar emoji={child.avatar_emoji} name={child.display_name} photoUrl={child.photo_url} active={child.is_active} size="sm" />
                 {child.is_active && (
                   <LevelIndicator level={child.level} xp={child.xp} size="sm" />
                 )}

@@ -19,18 +19,27 @@ export function DayNavigator({ date, onDateChange }: DayNavigatorProps) {
       >
         <ChevronLeft size={18} />
       </button>
-      <button
-        onClick={() => today ? null : onDateChange(new Date())}
-        className={`text-sm font-medium px-3 py-1 rounded-full transition-colors ${
-          today ? 'text-orange-600 bg-orange-50' : 'text-gray-600 hover:bg-gray-100'
-        }`}
-      >
-        {today ? 'Today' : format(date, 'EEE, MMM d')}
-      </button>
+      <div className="flex items-center gap-1.5">
+        <button
+          onClick={() => today ? null : onDateChange(new Date())}
+          className={`text-sm font-medium px-3 py-1 rounded-full transition-colors ${
+            today ? 'text-orange-600 bg-orange-50' : 'text-gray-600 hover:bg-gray-100'
+          }`}
+        >
+          {format(date, 'EEE, MMM d')}
+        </button>
+        {!today && (
+          <button
+            onClick={() => onDateChange(new Date())}
+            className="text-[10px] font-semibold text-orange-500 bg-orange-50 px-2 py-0.5 rounded-full hover:bg-orange-100 transition-colors"
+          >
+            Today
+          </button>
+        )}
+      </div>
       <button
         onClick={() => onDateChange(addDays(date, 1))}
-        disabled={today}
-        className="p-1.5 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+        className="p-1.5 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
       >
         <ChevronRight size={18} />
       </button>

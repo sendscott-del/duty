@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { Plus, UserMinus, UserCheck } from 'lucide-react'
+import { useState, useRef } from 'react'
+import { Plus, UserMinus, UserCheck, Camera } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import type { FamilyMember } from '@/lib/types'
 
@@ -75,29 +75,7 @@ export function MemberManager({ familyId, members, onUpdated }: MemberManagerPro
 
       <div className="space-y-2">
         {children.map(child => (
-          <div key={child.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-            <div className="flex items-center gap-3">
-              <span className="text-xl">{child.avatar_emoji}</span>
-              <div>
-                <div className={`text-sm font-medium ${!child.is_active ? 'text-gray-400' : ''}`}>
-                  {child.display_name}
-                </div>
-                {child.pin && <div className="text-xs text-gray-400">PIN set</div>}
-                {!child.is_active && <div className="text-xs text-gray-400">Away</div>}
-              </div>
-            </div>
-            <button
-              onClick={() => toggleActive(child)}
-              className={`p-2 rounded-lg text-xs ${
-                child.is_active
-                  ? 'text-gray-400 hover:bg-gray-200'
-                  : 'text-green-600 hover:bg-green-50'
-              }`}
-              title={child.is_active ? 'Mark as away' : 'Mark as active'}
-            >
-              {child.is_active ? <UserMinus size={16} /> : <UserCheck size={16} />}
-            </button>
-          </div>
+          <MemberRow key={child.id} member={child} familyId={familyId} onToggleActive={() => toggleActive(child)} onUpdated={onUpdated} />
         ))}
       </div>
 
@@ -161,6 +139,85 @@ export function MemberManager({ familyId, members, onUpdated }: MemberManagerPro
           </div>
         </form>
       )}
+    </div>
+  )
+}
+
+// Individual member row with photo upload
+function MemberRow({ member, familyId, onToggleActive, onUpdated }: {
+  member: FamilyMember
+  familyId: string
+  onToggleActive: () => void
+  onUpdated: () => void
+}) {
+  const fileRef = useRef<HTMLInputElement>(null)
+  const [uploading, setUploading] = useState(false)
+
+  const handlePhoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploading(true)
+
+    const ext = file.name.split('.').pop() || 'jpg'
+    const path = `${familyId}/profiles/${member.id}.${ext}`
+
+    const { error } = await supabase.storage
+      .from('chore-photos')
+      .upload(path, file, { upsert: true })
+
+    if (!error) {
+      const { data: urlData } = supabase.storage.from('chore-photos').getPublicUrl(path)
+      await supabase
+        .from('chores_family_members')
+        .update({ photo_url: urlData.publicUrl + '?t=' + Date.now() })
+        .eq('id', member.id)
+      onUpdated()
+    }
+    setUploading(false)
+  }
+
+  return (
+    <div className="flex items-center justify-between p-3 bg-white rounded-xl border border-gray-100 shadow-sm">
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => fileRef.current?.click()}
+          className="relative"
+          title="Change photo"
+        >
+          <div className="w-10 h-10 rounded-full overflow-hidden bg-orange-100 flex items-center justify-center">
+            {member.photo_url ? (
+              <img src={member.photo_url} alt={member.display_name} className="w-full h-full object-cover" />
+            ) : (
+              <span className="text-lg">{member.avatar_emoji}</span>
+            )}
+          </div>
+          <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-orange-500 rounded-full flex items-center justify-center">
+            <Camera size={8} className="text-white" />
+          </div>
+          <input ref={fileRef} type="file" accept="image/*" onChange={handlePhoto} className="hidden" />
+        </button>
+        <div>
+          <div className={`text-sm font-medium ${!member.is_active ? 'text-gray-400' : ''}`}>
+            {member.display_name}
+          </div>
+          <div className="flex items-center gap-1.5">
+            {member.pin && <span className="text-[10px] text-gray-400">PIN set</span>}
+            {!member.is_active && <span className="text-[10px] text-gray-400">Away</span>}
+            {uploading && <span className="text-[10px] text-orange-500">Uploading...</span>}
+          </div>
+        </div>
+      </div>
+      <button
+        onClick={onToggleActive}
+        className={`p-2 rounded-lg text-xs ${
+          member.is_active
+            ? 'text-gray-400 hover:bg-gray-100'
+            : 'text-green-600 hover:bg-green-50'
+        }`}
+        title={member.is_active ? 'Mark as away' : 'Mark as active'}
+      >
+        {member.is_active ? <UserMinus size={16} /> : <UserCheck size={16} />}
+      </button>
     </div>
   )
 }

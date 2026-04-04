@@ -11,6 +11,7 @@ export interface FamilyMember {
   display_name: string
   role: 'parent' | 'child'
   avatar_emoji: string
+  photo_url: string | null
   pin: string | null
   is_active: boolean
   xp: number

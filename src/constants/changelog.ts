@@ -1,4 +1,4 @@
-export const APP_VERSION = '0.2.3'
+export const APP_VERSION = '0.2.4'
 
 export interface ChangelogEntry {
   version: string
@@ -8,6 +8,16 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '0.2.4',
+    date: '2026-04-03',
+    enhancements: [
+      'Profile photos — tap a kid\'s avatar in Settings to upload a photo',
+      'Photos show in header, profile switcher, and family dashboard',
+      'Day navigator now scrolls forward to see upcoming chores',
+      'Quick "Today" button when viewing past or future dates',
+    ],
+  },
   {
     version: '0.2.3',
     date: '2026-04-03',

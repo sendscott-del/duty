@@ -65,7 +65,11 @@ export function AppShell({ children }: AppShellProps) {
             onClick={() => setShowProfilePicker(!showProfilePicker)}
             className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
           >
-            <span className="text-sm">{member.avatar_emoji}</span>
+            {member.photo_url ? (
+              <img src={member.photo_url} alt="" className="w-5 h-5 rounded-full object-cover" />
+            ) : (
+              <span className="text-sm">{member.avatar_emoji}</span>
+            )}
             <span className="text-sm font-medium text-gray-700">{member.display_name}</span>
           </button>
           <button
@@ -94,7 +98,11 @@ export function AppShell({ children }: AppShellProps) {
                   m.id === member.id ? 'bg-orange-50 text-orange-700 font-medium' : 'hover:bg-gray-50 text-gray-700'
                 }`}
               >
-                <span className="text-lg">{m.avatar_emoji}</span>
+                {m.photo_url ? (
+                  <img src={m.photo_url} alt="" className="w-6 h-6 rounded-full object-cover" />
+                ) : (
+                  <span className="text-lg">{m.avatar_emoji}</span>
+                )}
                 <span className="flex-1">{m.display_name}</span>
                 {m.role === 'parent' && <span className="text-[10px] text-gray-400 font-medium bg-gray-100 px-1.5 py-0.5 rounded">Parent</span>}
               </button>
