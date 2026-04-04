@@ -13,7 +13,7 @@ export default function HomePage() {
       {isParent ? (
         <FamilyDashboard />
       ) : member ? (
-        <KidDashboard memberId={member.id} />
+        <KidDashboard key={member.id} memberId={member.id} />
       ) : null}
     </AppShell>
   )
