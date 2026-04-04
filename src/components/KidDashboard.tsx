@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useFamilyMember } from '@/lib/hooks/useFamilyMember'
 import { useChoresData } from '@/lib/hooks/useChoresData'
 import { useRewards } from '@/lib/hooks/useRewards'
+import { useRewardShop } from '@/lib/hooks/useRewardShop'
 import { useGamification } from '@/lib/hooks/useGamification'
 import { useChallenges } from '@/lib/hooks/useChallenges'
 import { ChoreList } from './ChoreList'
@@ -14,6 +15,7 @@ import { BadgeCase } from './BadgeCase'
 import { BadgeUnlockToast } from './BadgeUnlockToast'
 import { LevelUpModal } from './LevelUpModal'
 import { WeeklyChallenge } from './WeeklyChallenge'
+import { SavingsGoal } from './SavingsGoal'
 import { DayNavigator } from './DayNavigator'
 import { isDueOnDate, completionKey } from '@/lib/dates'
 import { format, isToday } from 'date-fns'
@@ -28,6 +30,7 @@ export function KidDashboard({ memberId }: KidDashboardProps) {
   const { family, member, isParent, allMembers } = useFamilyMember()
   const { chores, completions, members, loading, upsertCompletion } = useChoresData(family?.id)
   const { getBalance } = useRewards(family?.id)
+  const { savingGoalReward, avgDailyXP } = useRewardShop(family?.id, memberId)
   const { badges, earnedBadges, newlyEarned, dismissBadge, awardXP, updateStreak, checkBadges, awardCleanSweep } = useGamification(family?.id, memberId)
   const { challenge } = useChallenges(family?.id)
   const [levelUp, setLevelUp] = useState<number | null>(null)
@@ -126,6 +129,11 @@ export function KidDashboard({ memberId }: KidDashboardProps) {
       {/* Weekly challenge */}
       {challenge && (
         <WeeklyChallenge challenge={challenge} progress={challengeProgress} isParent={false} />
+      )}
+
+      {/* Savings goal */}
+      {savingGoalReward && (
+        <SavingsGoal reward={savingGoalReward} balance={balance} avgDailyXP={avgDailyXP} />
       )}
 
       {/* Chore list */}

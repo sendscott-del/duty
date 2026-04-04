@@ -1,4 +1,4 @@
-export const APP_VERSION = '0.2.4'
+export const APP_VERSION = '0.3.0'
 
 export interface ChangelogEntry {
   version: string
@@ -8,6 +8,20 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '0.3.0',
+    date: '2026-04-03',
+    enhancements: [
+      'Reward Shop — kids browse rewards in a categorized shop with heart wishlist',
+      'Savings Goal — set your #1 wishlist item and see a progress thermometer on the dashboard',
+      'Inventory — fulfilled rewards appear in "My Stuff" like RPG loot',
+      'Wishlist — heart any reward to save it, tap "Set goal" to track progress',
+      'Redemption workflow — kids redeem, parents approve/fulfill/deny',
+      'Reward categories — Treats, Screen Time, Activities, Purchases, Privileges',
+      'Limited stock rewards — create urgency with "3 left!" badges',
+      'Pending redemptions queue for parents on the rewards page',
+    ],
+  },
   {
     version: '0.2.4',
     date: '2026-04-03',

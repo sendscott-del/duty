@@ -60,6 +60,8 @@ export interface Completion {
   updated_at: string
 }
 
+export type RewardCategory = 'treat' | 'screen_time' | 'activity' | 'purchase' | 'privilege' | 'general'
+
 export interface Reward {
   id: string
   family_id: string
@@ -67,9 +69,21 @@ export interface Reward {
   description: string | null
   point_cost: number
   emoji: string
+  category: RewardCategory
+  image_url: string | null
+  is_limited: boolean
+  stock: number | null
   is_active: boolean
   created_by: string
   created_at: string
+}
+
+export interface WishlistItem {
+  id: string
+  member_id: string
+  reward_id: string
+  priority: number
+  added_at: string
 }
 
 export type BadgeCategory = 'streak' | 'milestone' | 'special'
@@ -109,6 +123,8 @@ export interface Challenge {
   created_at: string
 }
 
+export type RedemptionStatus = 'pending' | 'approved' | 'fulfilled' | 'denied'
+
 export interface Redemption {
   id: string
   reward_id: string
@@ -117,4 +133,6 @@ export interface Redemption {
   redeemed_at: string
   fulfilled: boolean
   fulfilled_at: string | null
+  status: RedemptionStatus
+  parent_note: string | null
 }

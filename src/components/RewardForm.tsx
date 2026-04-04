@@ -27,6 +27,9 @@ export function RewardForm({ familyId, userId, reward, onSaved, onClose }: Rewar
   const [description, setDescription] = useState(reward?.description || '')
   const [pointCost, setPointCost] = useState(reward?.point_cost ?? 10)
   const [emoji, setEmoji] = useState(reward?.emoji || '🎁')
+  const [category, setCategory] = useState(reward?.category || 'general')
+  const [isLimited, setIsLimited] = useState(reward?.is_limited ?? false)
+  const [stock, setStock] = useState(reward?.stock ?? 5)
   const [showPresets, setShowPresets] = useState(!reward)
   const [saving, setSaving] = useState(false)
 
@@ -40,6 +43,9 @@ export function RewardForm({ familyId, userId, reward, onSaved, onClose }: Rewar
       description: description || null,
       point_cost: pointCost,
       emoji,
+      category,
+      is_limited: isLimited,
+      stock: isLimited ? stock : null,
       created_by: userId,
     }
 
@@ -155,6 +161,46 @@ export function RewardForm({ familyId, userId, reward, onSaved, onClose }: Rewar
               ))}
             </div>
           </div>
+
+          {/* Category */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Category</label>
+            <select
+              value={category}
+              onChange={e => setCategory(e.target.value as typeof category)}
+              className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-orange-400 transition-shadow"
+            >
+              <option value="general">General</option>
+              <option value="treat">Treats</option>
+              <option value="screen_time">Screen Time</option>
+              <option value="activity">Activities</option>
+              <option value="purchase">Purchases</option>
+              <option value="privilege">Privileges</option>
+            </select>
+          </div>
+
+          {/* Limited stock */}
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={isLimited}
+              onChange={e => setIsLimited(e.target.checked)}
+              className="rounded accent-orange-500"
+            />
+            Limited quantity
+          </label>
+          {isLimited && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Stock</label>
+              <input
+                type="number"
+                min={1}
+                value={stock}
+                onChange={e => setStock(Number(e.target.value))}
+                className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-orange-400 transition-shadow"
+              />
+            </div>
+          )}
 
           <button
             type="submit"
