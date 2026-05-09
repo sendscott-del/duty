@@ -1,4 +1,4 @@
-export const APP_VERSION = '0.5.0'
+export const APP_VERSION = '0.5.1'
 
 export interface ChangelogEntry {
   version: string
@@ -8,6 +8,15 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '0.5.1',
+    date: '2026-05-09',
+    enhancements: [
+      'New families can sign up themselves — pick a family name, family link slug, and your own name',
+      'Setup wizard checks slug availability and shows the family link to share with kids when finished',
+      'Auto-suggests a slug from the family name (e.g. "The Smith Family" → "smith")',
+    ],
+  },
   {
     version: '0.5.0',
     date: '2026-05-09',
