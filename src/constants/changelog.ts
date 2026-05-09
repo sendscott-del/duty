@@ -1,4 +1,4 @@
-export const APP_VERSION = '0.4.1'
+export const APP_VERSION = '0.5.0'
 
 export interface ChangelogEntry {
   version: string
@@ -8,6 +8,15 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '0.5.0',
+    date: '2026-05-09',
+    enhancements: [
+      'Family URLs — each family gets a short URL like /f/shurtliff that opens straight to the kids\' face picker',
+      'Multi-family ready — every family signs in via their own /f/{slug} link; no shared default',
+      'Kids open the URL once, Add to Home Screen, and sign in with just their PIN forever after',
+    ],
+  },
   {
     version: '0.4.1',
     date: '2026-05-09',
