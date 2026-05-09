@@ -1,4 +1,4 @@
-export const APP_VERSION = '0.3.0'
+export const APP_VERSION = '0.4.0'
 
 export interface ChangelogEntry {
   version: string
@@ -8,6 +8,17 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '0.4.0',
+    date: '2026-05-09',
+    enhancements: [
+      'PIN login for kids — tap your face, type 4 digits, you\'re in (no parent password needed)',
+      'Kids stay signed in on their phone — add Duty to the home screen, sign in once with PIN, done',
+      'Each kid now has their own login session (provisioned automatically when a parent sets a PIN)',
+      'Set or change a child\'s PIN from Settings using the new key icon next to their name',
+      'PIN brute-force protection — 5 wrong tries locks the profile for 5 minutes',
+    ],
+  },
   {
     version: '0.3.0',
     date: '2026-04-03',

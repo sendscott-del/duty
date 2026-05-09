@@ -59,6 +59,9 @@ export function useFamilyMember() {
 
       if (familyData) {
         setFamily(familyData as Family)
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('duty_family_id', (familyData as Family).id)
+        }
       }
 
       const { data: membersData } = await supabase
