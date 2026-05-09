@@ -1,4 +1,4 @@
-export const APP_VERSION = '0.4.0'
+export const APP_VERSION = '0.4.1'
 
 export interface ChangelogEntry {
   version: string
@@ -8,6 +8,14 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '0.4.1',
+    date: '2026-05-09',
+    enhancements: [
+      'Kids no longer need a parent to log in first — open Duty, tap your face, type your PIN',
+      'Login screen defaults to the family face picker; "Parent? Use email" link still available',
+    ],
+  },
   {
     version: '0.4.0',
     date: '2026-05-09',

@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase'
 import { PinLogin } from '@/components/PinLogin'
 
 const FAMILY_ID_KEY = 'duty_family_id'
+const DEFAULT_FAMILY_ID = process.env.NEXT_PUBLIC_DUTY_DEFAULT_FAMILY_ID || null
 
 export default function LoginPage() {
   const router = useRouter()
@@ -19,7 +20,8 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    const id = typeof window !== 'undefined' ? localStorage.getItem(FAMILY_ID_KEY) : null
+    const stored = typeof window !== 'undefined' ? localStorage.getItem(FAMILY_ID_KEY) : null
+    const id = stored ?? DEFAULT_FAMILY_ID
     setKnownFamilyId(id)
     setMode(id ? 'pin' : 'email')
   }, [])
