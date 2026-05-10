@@ -2,6 +2,7 @@
 
 import { AppShell } from '@/components/AppShell'
 import { MemberManager } from '@/components/MemberManager'
+import { FamilyLinkCard } from '@/components/FamilyLinkCard'
 import { useFamilyMember } from '@/lib/hooks/useFamilyMember'
 import { APP_VERSION } from '@/constants/changelog'
 
@@ -22,6 +23,11 @@ export default function SettingsPage() {
           <div className="text-sm font-medium text-gray-700">Family</div>
           <div className="text-lg font-bold">{family.name}</div>
         </div>
+
+        {/* Family link (parent only) */}
+        {isParent && (
+          <FamilyLinkCard family={family} onUpdated={refresh} />
+        )}
 
         {/* Your profile */}
         <div className="bg-gray-50 rounded-xl p-4">

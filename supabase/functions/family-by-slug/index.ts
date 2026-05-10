@@ -26,16 +26,35 @@ Deno.serve(async (req: Request) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    const { data, error } = await admin
+    // Canonical slug
+    const { data: direct, error: directErr } = await admin
       .from("chores_families")
       .select("id, name, slug")
       .eq("slug", normalized)
       .maybeSingle();
+    if (directErr) return json({ error: directErr.message }, 500);
+    if (direct) {
+      return json({ family_id: direct.id, name: direct.name, slug: direct.slug, alias: false }, 200);
+    }
 
-    if (error) return json({ error: error.message }, 500);
-    if (!data) return json({ error: "not_found" }, 404);
+    // Fallback: alias (old slug after a rename)
+    const { data: alias, error: aliasErr } = await admin
+      .from("chores_family_slug_aliases")
+      .select("family_id")
+      .eq("slug", normalized)
+      .maybeSingle();
+    if (aliasErr) return json({ error: aliasErr.message }, 500);
+    if (alias) {
+      const { data: family, error: famErr } = await admin
+        .from("chores_families")
+        .select("id, name, slug")
+        .eq("id", alias.family_id)
+        .single();
+      if (famErr || !family) return json({ error: "not_found" }, 404);
+      return json({ family_id: family.id, name: family.name, slug: family.slug, alias: true }, 200);
+    }
 
-    return json({ family_id: data.id, name: data.name, slug: data.slug }, 200);
+    return json({ error: "not_found" }, 404);
   } catch (e) {
     return json({ error: String(e) }, 500);
   }

@@ -170,12 +170,25 @@ export function AppShell({ children }: AppShellProps) {
 }
 
 // Setup flow
+const SLUG_STOPWORDS = new Set([
+  'the', 'a', 'an', 'our', 'my',
+  'family', 'families', 'fam', 'household', 'home', 'house', 'hh', 'clan',
+])
+
 function slugify(input: string) {
   return input
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
     .slice(0, 41)
+}
+
+function suggestSlug(input: string) {
+  const tokens = input.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean)
+  if (tokens.length === 0) return ''
+  const filtered = tokens.filter(t => !SLUG_STOPWORDS.has(t))
+  const useTokens = filtered.length > 0 ? filtered : tokens
+  return useTokens.join('-').slice(0, 41)
 }
 
 function SetupFamily({ userId, onComplete }: { userId: string; onComplete: () => void }) {
@@ -192,7 +205,7 @@ function SetupFamily({ userId, onComplete }: { userId: string; onComplete: () =>
     if (typeof window !== 'undefined') setOrigin(window.location.origin)
   }, [])
 
-  const effectiveSlug = slugTouched ? slug : slugify(familyName)
+  const effectiveSlug = slugTouched ? slug : suggestSlug(familyName)
   const slugValid = /^[a-z0-9][a-z0-9-]{0,40}$/.test(effectiveSlug)
 
   async function handleSetup(e: React.FormEvent) {

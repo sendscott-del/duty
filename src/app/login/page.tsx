@@ -31,11 +31,23 @@ export default function LoginPage() {
     setLoading(true)
 
     if (isSignUp) {
-      const { error } = await supabase.auth.signUp({ email, password })
-      if (error) {
-        setError(error.message)
+      const { data, error: fnErr } = await supabase.functions.invoke('parent-signup', {
+        body: { email, password },
+      })
+      const code = (data as { error?: string } | null)?.error
+      if (fnErr || code) {
+        if (code === 'email_taken') setError('That email already has an account — sign in instead.')
+        else if (code === 'weak_password') setError('Password must be at least 6 characters.')
+        else if (code === 'invalid_email') setError('That email address looks invalid.')
+        else setError('Could not create account — try again.')
+        setLoading(false)
+        return
+      }
+      const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password })
+      if (signInErr) {
+        setError(signInErr.message)
       } else {
-        setMessage('Check your email to confirm your account.')
+        router.push('/')
       }
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password })

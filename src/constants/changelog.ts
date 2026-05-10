@@ -1,4 +1,4 @@
-export const APP_VERSION = '0.5.1'
+export const APP_VERSION = '0.6.0'
 
 export interface ChangelogEntry {
   version: string
@@ -8,6 +8,15 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: '0.6.0',
+    date: '2026-05-10',
+    enhancements: [
+      'Family link is now editable from Settings — rename it any time, old URLs keep working',
+      'Signup is instant — no email-confirm wait; create an account and you\'re straight into setup',
+      'Smarter family-link suggestion — "The Smith Family" now suggests "smith" instead of "the-smith-family"',
+    ],
+  },
   {
     version: '0.5.1',
     date: '2026-05-09',

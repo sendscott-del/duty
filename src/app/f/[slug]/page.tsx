@@ -41,6 +41,15 @@ export default function FamilySlugPage() {
       if (typeof window !== 'undefined') {
         localStorage.setItem('duty_family_id', data.family_id)
       }
+
+      // If we resolved via alias, send the kid to the canonical URL so any
+      // future Add-to-Home-Screen captures the up-to-date slug.
+      const canonical = (data as { slug?: string }).slug
+      if (canonical && canonical !== slug) {
+        router.replace(`/f/${canonical}`)
+        return
+      }
+
       setFamilyId(data.family_id)
       setFamilyName(data.name ?? '')
       setStatus('ready')
